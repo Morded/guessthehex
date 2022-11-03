@@ -53,7 +53,7 @@ const Home: NextPage = () => {
   }
 
   const createGame = () => {
-    let colorArray = new Array;
+    let colorArray: string[] = [];
     const optionCount = 3;
 
     // Create equal amount of hexes to the optionCount
