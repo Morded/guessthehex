@@ -134,7 +134,7 @@ const Home: NextPage = () => {
 
         <div className="relative flex flex-row place-content-center items-center">
           <p className="absolute sm:relative px-4 py-2 font-extrabold bg-white rounded text-2xl transition-all ease-in-out duration-300" style={{ color: correctIncorrect.incorrect, opacity: correctGuess === false ? 1 : 0 }}>Incorrect</p>
-          <div style={{ background: answer }} className="h-72 w-72 shadow-xl transition-all ease-in-out duration-200"></div>
+          <div style={{ background: answer }} className="rounded h-72 w-72 shadow-xl transition-all ease-in-out duration-200"></div>
           <p className="absolute sm:relative px-4 py-2 font-extrabold bg-white rounded text-2xl transition-all ease-in-out duration-300" style={{ color: correctIncorrect.correct, opacity: correctGuess === true ? 1 : 0 }}>Correct</p>
         </div>
 
