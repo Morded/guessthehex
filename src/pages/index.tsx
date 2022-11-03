@@ -195,7 +195,7 @@ const Home: NextPage = () => {
           </div>
         }
 
-        <div style={{ opacity: showCopy ? 1 : 0 }} className="shadow-xl py-2 px-8 border border-gray-200 text-center rounded fixed bottom-5 bg-white font-bold transition-all duration-300 ease-in-out">
+        <div style={{ opacity: showCopy ? 1 : 0 }} className="shadow-xl py-2 px-8 border border-gray-200 text-center rounded fixed bottom-5 bg-white transition-all duration-300 ease-in-out">
           Copied to clipboard
         </div>
 
