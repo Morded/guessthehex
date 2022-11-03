@@ -170,7 +170,7 @@ const Home: NextPage = () => {
         </div>
 
         {answerHistory.length > 0 &&
-          <div className="flex flex-col sm:flex-row text-gray-700 gap-6 mt-10">
+          <div className="flex flex-col sm:flex-row w-full sm:w-auto text-gray-700 gap-6 mt-10 mx-2">
             <h1 className="font-extrabold text-4xl text-center">History</h1>
             <div className="max-h-48 w-96 overflow-auto">
               {
