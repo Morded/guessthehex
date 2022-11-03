@@ -91,7 +91,7 @@ const Home: NextPage = () => {
   }
 
   useEffect(() => {
-    let timer = setTimeout(() => setCorrectGuess(undefined), 500);
+    const timer = setTimeout(() => setCorrectGuess(undefined), 500);
 
     return () => {
       clearTimeout(timer);
@@ -175,7 +175,7 @@ const Home: NextPage = () => {
             <div className="max-h-48 w-96 overflow-auto">
               {
                 [...answerHistory].reverse().map((answer, i) => (
-                  <div className="flex gap-2 items-center relative">
+                  <div key={i} className="flex gap-2 items-center relative">
 
                     <span className="font-bold w-6 text-center">{answerHistory.length - i}.</span>
                     <div className="flex items-center gap-2 flex-even rounded border-gray-200 py-2">
