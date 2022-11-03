@@ -131,7 +131,7 @@ const Home: NextPage = () => {
               :
               options?.map(color => (
                 <button onClick={() => handleClick(color)} key={color}
-                  className="flex flex-col w-full sm:w-auto justify-center rounded border border-gray-200 px-8 py-3 shadow-md cursor-pointer duration-500 motion-safe:hover:scale-105" >
+                  className="flex flex-col w-full sm:w-auto text-center justify-center rounded border border-gray-200 px-8 py-3 shadow-md cursor-pointer duration-500 motion-safe:hover:scale-105" >
                   <h2 className="text-lg text-gray-700 uppercase">{color}</h2>
                 </button >
               ))
