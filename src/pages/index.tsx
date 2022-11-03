@@ -1,10 +1,10 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
-import { FcLike, FcLikePlaceholder } from "react-icons/fc";
-import { FaUndo, FaInfoCircle } from "react-icons/fa";
+import { FaUndo, FaInfoCircle, FaCopy } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
-
+import Health from "../components/health"
+import { GuideSection, ColorExample } from "../components/guide"
 
 const Home: NextPage = () => {
   const [answer, setAnswer] = useState('');
@@ -13,13 +13,15 @@ const Home: NextPage = () => {
   const [points, setPoints] = useState(0)
   const [isGameOver, setIsGameOver] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
+  const [answerHistory, setAnswerHistory] = useState<{ color: string, isCorrect: boolean }[]>([]);
+  const [showCopy, setShowCopy] = useState(false);
   const guide = useRef(null);
   useOutsideCloser(guide);
 
   function useOutsideCloser(ref: any) {
     useEffect(() => {
       /**
-       * Alert if clicked on outside of element
+       * Close if clicked on outside of element
        */
       function handleClickOutside(event: any) {
         if (ref.current && !ref.current.contains(event.target)) {
@@ -76,6 +78,8 @@ const Home: NextPage = () => {
       setIsGameOver(health - 1 === 0);
       setHealth(health - 1);
     }
+
+    setAnswerHistory([...answerHistory, { color: answer, isCorrect: guess === answer }]);
   }
 
   const handleRestart = () => {
@@ -86,6 +90,12 @@ const Home: NextPage = () => {
 
   const toggleGuide = () => {
     setShowGuide(!showGuide);
+  }
+
+  const handleCopy = (color: string) => {
+    setShowCopy(true);
+    navigator.clipboard.writeText(color);
+    setTimeout(() => setShowCopy(false), 2000);
   }
 
   return (
@@ -119,7 +129,7 @@ const Home: NextPage = () => {
           </p>
         </div>
 
-        <div className="mt-3 flex flex-wrap justify-center gap-3 pt-3 text-center lg:w-2/3">
+        <div className="my-3 flex flex-wrap justify-center gap-3 pt-3 text-center lg:w-2/3">
           {
             isGameOver
               ?
@@ -138,30 +148,67 @@ const Home: NextPage = () => {
           }
         </div>
 
+        {answerHistory.length > 0 &&
+          <div className="flex flex-row text-gray-700 gap-6 my-10">
+            <h1 className="font-extrabold text-4xl text-center">History</h1>
+            <div className="max-h-48 w-96 overflow-auto">
+              {
+                [...answerHistory].reverse().map((answer, i) => (
+                  <div className="flex gap-2 items-center relative">
+
+                    <span className="font-bold w-6 text-center">{answerHistory.length - i}.</span>
+                    <div className="flex items-center gap-2 flex-even rounded border-gray-200 py-2">
+                      <div style={{ background: answer.color }} className="grow w-10 h-10" ></div>
+                      <span className="uppercase">{answer.color}</span>
+                      <button onClick={() => handleCopy(answer.color)} className="pl-2 text-gray-300 hover:text-gray-700">
+                        <FaCopy />
+                      </button>
+                      <p className="text-lg font-extrabold absolute right-5" style={{ color: answer.isCorrect ? '#7fae7d' : '#db7171' }}>
+                        {answer.isCorrect ? 'Correct' : 'Incorrect'}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        }
+
+        <div style={{ opacity: showCopy ? 1 : 0 }} className="shadow-xl py-2 px-8 border border-gray-200 text-center rounded fixed bottom-5 bg-white font-bold transition-all duration-300 ease-in-out">
+          Copied to clipboard
+        </div>
+
         {showGuide &&
           <div ref={guide} className="text-center text-sm fixed bg-neutral-50 mt-10 p-10 border rounded border-gray-200 shadow-sm transition-all ease-in-out duration-500">
             <button onClick={() => toggleGuide()} className="absolute top-5 right-5 text-xl" ><FiX /></button>
 
-            <h1 className="text-xl font-bold mb-4">What is hex?</h1>
-            <p>A hex triplet is a six-digit number to represent colors. </p>
-            <p>Every pair represents one of the RGB colors in the range of 00 to FF (in hex) or 0 to 255 in decimals.</p>
-            <div className="m-2"></div>
-            <p>The values can be in ascending order: <br />0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F</p>
-            <p>The higher the value, the more of that color is on the RGB scale.</p>
-            <div className="m-4"></div>
-            <h2 className="text-xl mb-4 font-bold">Examples</h2>
-            <div className="flex justify-center items-center">
-              <div className="mr-2 w-3 h-3 bg-[#ff0000]"></div>
-              <p>#FF0000 represents pure Red</p>
-            </div>
-            <div className="flex justify-center items-center">
-              <div className="mr-2 w-3 h-3 bg-[#00ff00]"></div>
-              <p>#00FF00 represents pure Green</p>
-            </div>
-            <div className="flex justify-center items-center">
-              <div className="mr-2 w-3 h-3 bg-[#0000FF]"></div>
-              <p>#0000FF represents pure Blue</p>
-            </div>
+            <GuideSection title="What is hex?" >
+              <p>
+                A hex triplet is a six-digit number to represent colors. <br />
+                Every pair represents one of the RGB colors in the range of 00 to FF (in hex) or 0 to 255 in decimals.
+              </p>
+              <div className="m-2"></div>
+              <p>
+                The values can be in ascending order: <br />
+                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F<br />
+                The higher the value, the more of that color is on the RGB scale.
+              </p>
+            </GuideSection>
+
+            <GuideSection title="What is hex?" >
+              <ColorExample
+                colorHex="#FF0000"
+                colorName="pure Red"
+              />
+              <ColorExample
+                colorHex="#00FF00"
+                colorName="pure Green"
+              />
+              <ColorExample
+                colorHex="#0000FF"
+                colorName="pure Blue"
+              />
+            </GuideSection>
 
           </div>
         }
@@ -172,56 +219,3 @@ const Home: NextPage = () => {
 
 export default Home;
 
-type HealthProps = {
-  isGameOver: boolean;
-  health: number;
-  maxHealth: number;
-}
-
-const Health = ({
-  isGameOver,
-  health,
-  maxHealth
-}: HealthProps) => {
-  return (
-    < div className="flex items-center mt-4" >
-      {
-        !isGameOver
-          ?
-          <>
-            <span className="mr-2">Health:</span>
-            <Hearts count={health} type={HeartType.Full} />
-            <Hearts count={maxHealth - health} type={HeartType.Empty} />
-          </>
-          : <h1 className="text-red-600 text-lg font-bold">Game Over</h1>
-      }
-    </div >
-  );
-};
-
-enum HeartType {
-  Full,
-  Empty
-}
-
-type HeartsProps = {
-  count: number;
-  type: HeartType;
-}
-
-const Hearts = ({
-  count,
-  type
-}: HeartsProps) => {
-  return (
-    <>
-      {
-        [...Array(count)].map(heart => (
-          type === HeartType.Full
-            ? <FcLike key={heart} />
-            : <FcLikePlaceholder key={heart} />
-        ))
-      }
-    </>
-  );
-};
