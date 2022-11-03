@@ -6,6 +6,11 @@ import { FiX } from "react-icons/fi";
 import Health from "../components/health"
 import { GuideSection, ColorExample } from "../components/guide"
 
+enum correctIncorrect {
+  correct = '#7fae7d',
+  incorrect = '#db7171',
+}
+
 const Home: NextPage = () => {
   const [answer, setAnswer] = useState('');
   const [options, setOptions] = useState<string[]>();
@@ -15,6 +20,7 @@ const Home: NextPage = () => {
   const [showGuide, setShowGuide] = useState(false);
   const [answerHistory, setAnswerHistory] = useState<{ color: string, isCorrect: boolean }[]>([]);
   const [showCopy, setShowCopy] = useState(false);
+  const [correctGuess, setCorrectGuess] = useState<boolean | undefined>();
   const guide = useRef(null);
   useOutsideCloser(guide);
 
@@ -73,8 +79,10 @@ const Home: NextPage = () => {
 
   const handleClick = (guess: string) => {
     if (guess === answer) {
+      setCorrectGuess(true);
       setPoints(points + 100);
     } else {
+      setCorrectGuess(false);
       setIsGameOver(health - 1 === 0);
       setHealth(health - 1);
     }
@@ -82,10 +90,19 @@ const Home: NextPage = () => {
     setAnswerHistory([...answerHistory, { color: answer, isCorrect: guess === answer }]);
   }
 
+  useEffect(() => {
+    let timer = setTimeout(() => setCorrectGuess(undefined), 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [correctGuess])
+
   const handleRestart = () => {
     setIsGameOver(false);
     setHealth(10);
     setPoints(0);
+    setAnswerHistory([]);
   }
 
   const toggleGuide = () => {
@@ -115,7 +132,11 @@ const Home: NextPage = () => {
           <span className="text-sm ">Help</span>
         </button>
 
-        <div style={{ background: answer }} className="h-72 w-72 shadow-xl"></div>
+        <div className="relative flex flex-row place-content-center items-center">
+          <p className="p-4 font-extrabold text-xl transition-all ease-in-out duration-300" style={{ color: correctIncorrect.incorrect, opacity: correctGuess === false ? 1 : 0 }}>Incorrect</p>
+          <div style={{ background: answer }} className="h-72 w-72 shadow-xl transition-all ease-in-out duration-200"></div>
+          <p className="p-4 font-extrabold text-xl transition-all ease-in-out duration-300" style={{ color: correctIncorrect.correct, opacity: correctGuess === true ? 1 : 0 }}>Correct</p>
+        </div>
 
         <Health
           isGameOver={isGameOver}
@@ -163,7 +184,7 @@ const Home: NextPage = () => {
                       <button onClick={() => handleCopy(answer.color)} className="pl-2 text-gray-300 hover:text-gray-700">
                         <FaCopy />
                       </button>
-                      <p className="text-lg font-extrabold absolute right-5" style={{ color: answer.isCorrect ? '#7fae7d' : '#db7171' }}>
+                      <p className="text-lg font-extrabold absolute right-5" style={{ color: answer.isCorrect ? correctIncorrect.correct : correctIncorrect.incorrect }}>
                         {answer.isCorrect ? 'Correct' : 'Incorrect'}
                       </p>
                     </div>
@@ -179,7 +200,7 @@ const Home: NextPage = () => {
         </div>
 
         {showGuide &&
-          <div ref={guide} className="text-center text-sm fixed bg-neutral-50 mt-10 p-10 border rounded border-gray-200 shadow-sm transition-all ease-in-out duration-500">
+          <div ref={guide} className="text-center text-sm fixed bg-neutral-50 p-10 border rounded border-gray-200 shadow-sm transition-all ease-in-out duration-500">
             <button onClick={() => toggleGuide()} className="absolute top-5 right-5 text-xl" ><FiX /></button>
 
             <GuideSection title="What is hex?" >
