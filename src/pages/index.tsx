@@ -123,8 +123,8 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <h1 className="text-5xl font-extrabold leading-normal text-gray-700 md:text-[5rem]">
+      <main className="container mx-auto flex min-h-screen flex-col items-center p-4">
+        <h1 className="mt-10 text-5xl font-extrabold leading-normal text-gray-700 md:text-[5rem]">
           Guess the hex
         </h1>
         <button onClick={() => toggleGuide()} className="flex justify-center items-center rounded-xl pr-4 bg-gray-100 mb-6 duration-500 hover:scale-105">
@@ -133,9 +133,9 @@ const Home: NextPage = () => {
         </button>
 
         <div className="relative flex flex-row place-content-center items-center">
-          <p className="p-4 font-extrabold text-xl transition-all ease-in-out duration-300" style={{ color: correctIncorrect.incorrect, opacity: correctGuess === false ? 1 : 0 }}>Incorrect</p>
+          <p className="absolute sm:relative px-4 py-2 font-extrabold bg-white rounded text-2xl transition-all ease-in-out duration-300" style={{ color: correctIncorrect.incorrect, opacity: correctGuess === false ? 1 : 0 }}>Incorrect</p>
           <div style={{ background: answer }} className="h-72 w-72 shadow-xl transition-all ease-in-out duration-200"></div>
-          <p className="p-4 font-extrabold text-xl transition-all ease-in-out duration-300" style={{ color: correctIncorrect.correct, opacity: correctGuess === true ? 1 : 0 }}>Correct</p>
+          <p className="absolute sm:relative px-4 py-2 font-extrabold bg-white rounded text-2xl transition-all ease-in-out duration-300" style={{ color: correctIncorrect.correct, opacity: correctGuess === true ? 1 : 0 }}>Correct</p>
         </div>
 
         <Health
@@ -162,7 +162,7 @@ const Home: NextPage = () => {
               :
               options?.map(color => (
                 <button onClick={() => handleClick(color)} key={color}
-                  className="flex flex-col w-full sm:w-auto text-center justify-center rounded border border-gray-200 px-8 py-3 shadow-md cursor-pointer duration-500 motion-safe:hover:scale-105" >
+                  className="flex flex-col w-2/3 sm:w-auto text-center justify-center rounded border border-gray-200 px-8 py-3 shadow-md cursor-pointer duration-500 motion-safe:hover:scale-105" >
                   <h2 className="text-lg text-gray-700 uppercase">{color}</h2>
                 </button >
               ))
@@ -170,7 +170,7 @@ const Home: NextPage = () => {
         </div>
 
         {answerHistory.length > 0 &&
-          <div className="flex flex-row text-gray-700 gap-6 my-10">
+          <div className="flex flex-col sm:flex-row text-gray-700 gap-6 mt-10">
             <h1 className="font-extrabold text-4xl text-center">History</h1>
             <div className="max-h-48 w-96 overflow-auto">
               {
