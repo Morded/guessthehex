@@ -6,9 +6,9 @@ import { FiX } from "react-icons/fi";
 import Health from "../components/health"
 import { GuideSection, ColorExample } from "../components/guide"
 
-enum correctIncorrect {
-  correct = '#7fae7d',
-  incorrect = '#db7171',
+enum CorrectIncorrect {
+  Correct = '#7fae7d',
+  Incorrect = '#db7171',
 }
 
 const Home: NextPage = () => {
@@ -133,9 +133,9 @@ const Home: NextPage = () => {
         </button>
 
         <div className="relative flex flex-row place-content-center items-center">
-          <p className="absolute sm:relative px-4 py-2 font-extrabold bg-white rounded text-2xl transition-all ease-in-out duration-300" style={{ color: correctIncorrect.incorrect, opacity: correctGuess === false ? 1 : 0 }}>Incorrect</p>
-          <div style={{ background: answer }} className="rounded h-72 w-72 shadow-xl transition-all ease-in-out duration-200"></div>
-          <p className="absolute sm:relative px-4 py-2 font-extrabold bg-white rounded text-2xl transition-all ease-in-out duration-300" style={{ color: correctIncorrect.correct, opacity: correctGuess === true ? 1 : 0 }}>Correct</p>
+          <p className="correctIncorrect transition-all-long" style={{ color: CorrectIncorrect.Incorrect, opacity: correctGuess === false ? 1 : 0 }}>Incorrect</p>
+          <div style={{ background: answer }} className="rounded h-72 w-72 shadow-xl transition-all-short"></div>
+          <p className="correctIncorrect transition-all-long" style={{ color: CorrectIncorrect.Correct, opacity: correctGuess === true ? 1 : 0 }}>Correct</p>
         </div>
 
         <Health
@@ -145,7 +145,7 @@ const Home: NextPage = () => {
         />
 
         <div className="items-center mb-4">
-          <p className="text-md transition ease-in-out duration-5000">Points:
+          <p className="text-md">Points:
             <span className="font-bold"> {points}</span>
           </p>
         </div>
@@ -155,14 +155,14 @@ const Home: NextPage = () => {
             isGameOver
               ?
               <button onClick={() => handleRestart()}
-                className="flex justify-center items-center rounded border border-gray-200 px-8 py-3 shadow-md cursor-pointer duration-500 motion-safe:hover:scale-105" >
+                className="flex justify-center items-center border-sm px-8 py-3 cursor-pointer duration-500 motion-safe:hover:scale-105" >
                 <FaUndo className="mt-1" />
                 <h2 className="text-lg ml-2 text-gray-700">Restart</h2>
               </button >
               :
               options?.map(color => (
                 <button onClick={() => handleClick(color)} key={color}
-                  className="flex flex-col w-2/3 sm:w-auto text-center justify-center items-center rounded border border-gray-200 px-8 py-3 shadow-sm cursor-pointer duration-500 motion-safe:hover:scale-105" >
+                  className="flex flex-col w-2/3 sm:w-auto text-center justify-center items-center border-sm px-8 py-3 cursor-pointer motion-safe:hover:scale-105" >
                   <h2 className="text-lg text-gray-700 uppercase">{color}</h2>
                 </button >
               ))
@@ -178,13 +178,13 @@ const Home: NextPage = () => {
                   <div key={i} className="flex gap-2 items-center relative">
 
                     <span className="font-bold w-6 text-center">{answerHistory.length - i}.</span>
-                    <div className="flex items-center gap-2 flex-even rounded border-gray-200 py-2">
+                    <div className="flex items-center gap-2 flex-even py-2">
                       <div style={{ background: answer.color }} className="grow w-10 h-10" ></div>
                       <span className="uppercase">{answer.color}</span>
                       <button onClick={() => handleCopy(answer.color)} className="pl-2 text-gray-300 hover:text-gray-700">
                         <FaCopy />
                       </button>
-                      <p className="text-lg font-extrabold absolute right-5" style={{ color: answer.isCorrect ? correctIncorrect.correct : correctIncorrect.incorrect }}>
+                      <p className="text-lg font-extrabold absolute right-5" style={{ color: answer.isCorrect ? CorrectIncorrect.Correct : CorrectIncorrect.Incorrect }}>
                         {answer.isCorrect ? 'Correct' : 'Incorrect'}
                       </p>
                     </div>
@@ -195,12 +195,12 @@ const Home: NextPage = () => {
           </div>
         }
 
-        <div style={{ opacity: showCopy ? 1 : 0 }} className="shadow-xl py-2 px-8 border border-gray-200 text-center rounded fixed bottom-5 bg-white transition-all duration-300 ease-in-out">
+        <div style={{ opacity: showCopy ? 1 : 0 }} className="border-xl py-2 px-8 text-center fixed bottom-5 bg-white transition-all-short">
           Copied to clipboard
         </div>
 
         {showGuide &&
-          <div ref={guide} className="text-center text-sm fixed bg-neutral-50 p-10 border rounded border-gray-200 shadow-sm transition-all ease-in-out duration-500">
+          <div ref={guide} className="text-center text-sm fixed bg-neutral-50 p-10 border-sm transition-all-long">
             <button onClick={() => toggleGuide()} className="absolute top-5 right-5 text-xl" ><FiX /></button>
 
             <GuideSection title="What is hex?" >
